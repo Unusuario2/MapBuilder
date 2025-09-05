@@ -20,7 +20,7 @@ MapBuilderSystem
 
 			RunLightBuilder 		
 			{
-				BuildParams "-fast -fastambient -noextra -bounce 1 -bounce 1 -game %gamedir %source"
+				BuildParams "-fast -fastambient -noextra -bounce 1 -game %gamedir %source"
 			}
 
 			RunTrasferFile
