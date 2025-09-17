@@ -416,9 +416,9 @@ static void RunMapBuilder()
 //-----------------------------------------------------------------------------
 static void PrintUsage(int argc, char* argv[])
 {
-    Msg("\nUsage: mapbuilder.exe [options] -map <mapfile>\n\n");
+    Msg("\nUsage: mapbuilder.exe [options] <mapfile>\n\n" /*"-map <mapfile>\n\n"*/);
     ColorSpewMessage(SPEW_MESSAGE, &ColorHeader, " General Options:\n");
-    Msg("   -map <path>:           Specify the path of the .vmf or .vmn file to compile.\n"
+    Msg(//"   -map <path>:           Specify the path of the .vmf or .vmn file to compile.\n"
         "   -preset <preset_name>: Specify the preset name inside %s to be run. If specified not the default one will run.\n"
         "   -game <path>:          Specify the folder of the gameinfo.txt file.\n"
         "   -vproject <path>:      Same as \'-game\'.\n"
@@ -442,7 +442,8 @@ static void PrintUsage(int argc, char* argv[])
         "   -quiet:                Prints minimal text. (Note: Disables \'-verbose\' and \'-spewallcommands\')\n"  
         "\n");
     ColorSpewMessage(SPEW_MESSAGE, &ColorHeader, " Other Options:\n");
-    Msg("   -FullMinidumps:        Write large minidumps on crash.\n"
+    Msg("   -help or -?:           Print usage."        
+        "   -FullMinidumps:        Write large minidumps on crash.\n"
         "\n");
 
     DeleteCmdLine(argc, argv);
@@ -530,6 +531,7 @@ static void ParseCommandline(int argc, char* argv[])
             g_bRunAin = true;
         } 
 #endif // RESOURCECOMPILER_SYSTEM
+        /*
         else if (!V_stricmp(argv[i], "-map"))
         {
             if (++i < argc && argv[i][0] != '-')
@@ -546,6 +548,7 @@ static void ParseCommandline(int argc, char* argv[])
                 Error("\nError: \'-map\' requires a valid path argument.\n");
             }
         }
+        */
         else if (!V_stricmp(argv[i], "-insert_search_path"))
         {
             // Pass to the commandline system
@@ -585,17 +588,20 @@ static void ParseCommandline(int argc, char* argv[])
         }
         else
         {
-            Warning("\nWarning Unknown option \'%s\'\n", argv[i]);
-            PrintUsage(argc, argv);
+            if (i != argc - 1) 
+            {
+                Warning("\nWarning Unknown option \'%s\'\n", argv[i]);
+                PrintUsage(argc, argv);
+            }
         }
     }
 
     // Sanity check!
-    if(gamedir[0] == '\0')
+    if (gamedir[0] == '\0')
         Error("\nError: \'-game\' requires a valid path argument. NULL path\n");
-    if(g_szSourceFile[0] =='\0')
-        Error("\nError: \'-map\' requires a valid path argument. NULL path\n");
-    
+
+    V_strcpy_safe(g_szSourceFile, argv[argc - 1]);
+
     Msg("\n");
 }
 
