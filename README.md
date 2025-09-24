@@ -3,7 +3,7 @@
 **MapBuilder** is a flexible command-line utility designed to automate the **map compilation pipeline** for Source Engine projects.  
 It replaces the need to manually run tools like `vbsp`, `vvis`, and `vrad` by allowing you to define **compile presets** and execute them in sequence with a single command.  
 
-Instead of hardcoding build steps, MapBuilder reads from a **scriptable configuration file** (`mapbuilder_system.txt`) where you can:  
+Instead of hardcoding build steps, MapBuilder reads from a **scriptable configuration file** (`mapbuilder_settings.txt`) where you can:  
 - Define multiple build **presets** (`Fast`, `Standard`, `Final`, etc.).  
 - Configure which tools should run (`vbsp`, `vvis`, `vrad`, `vbspinfo`, `resourcecopy`, cubemap builders, or custom tools).  
 - Pass flexible **build parameters** with placeholders like `%source`, `%filename`, `%gamedir`, `%mapbsp`, and `%mapdir`.  
@@ -20,7 +20,7 @@ By streamlining repetitive compile tasks, MapBuilder helps keep your workflow **
 
 ---
 
-## 📦 Installation  
+## Installation  
 
 To install **MapBuilder**, follow these steps:  
 
@@ -32,26 +32,26 @@ To install **MapBuilder**, follow these steps:
 
 ---
 
-## ✨ Features  
+## Features  
 
-- 🔧 **Compile Presets** – Define multiple presets (`Fast`, `Standard`, `Final`) in `mapbuilder_system.txt` for different workflows.  
-- 📜 **Scriptable Configuration** – Add or reorder tools, adjust parameters, and integrate custom steps without touching the source code.  
-- 🔄 **Custom Builders** – Run external programs or override default tools (`vbsp`, `vvis`, `vrad`) via the `ToolName` key.  
-- 🧩 **Dynamic Parameters** – Use placeholders like `%source`, `%filename`, `%gamedir`, `%mapbsp`, and `%mapdir` inside build parameters.  
-- 🚦 **Error Handling** – Optionally continue building even if one step fails (`-ignoreerrors`).  
-- 🗑 **Automatic Cleanup** – Removes leftover temporary files after a successful build.  
+-  **Compile Presets** – Define multiple presets (`Fast`, `Standard`, `Final`) in `mapbuilder_settings.txt` for different workflows.  
+-  **Scriptable Configuration** – Add or reorder tools, adjust parameters, and integrate custom steps without touching the source code.  
+-  **Custom Builders** – Run external programs or override default tools (`vbsp`, `vvis`, `vrad`) via the `ToolName` key.  
+-  **Dynamic Parameters** – Use placeholders like `%source`, `%filename`, `%gamedir`, `%mapbsp`, and `%mapdir` inside build parameters.  
+-  **Error Handling** – Optionally continue building even if one step fails (`-ignoreerrors`).  
+-  **Automatic Cleanup** – Removes leftover temporary files after a successful build.  
 ---
 
 # MapBuilder Script System  
 
-The **MapBuilder script system** is configured inside your game `scripts/tools/mapbuilder_system.txt`.  
+The **MapBuilder script system** is configured inside your game `scripts/tools/mapbuilder_settings.txt`.  
 It defines **compile presets** (`Fast`, `Standard`, `Final`, etc.) and the order in which each tool runs.  
 
 Every builder command is wrapped inside a **KeyValue block**, and execution order follows the order they appear.  
 
 ---
 
-## 📂 File Structure  
+## File Structure  
 
 ```txt
 MapBuilderSystem
@@ -85,7 +85,7 @@ MapBuilderSystem
 
 ---
 
-## 🛠 Supported Builders  
+## Supported Builders  
 
 Each builder corresponds to a compile tool. By default, these tools are assumed to exist in the **`bin` directory** (the same location as `mapbuilder.exe`).  
 You can override the executable with the **`ToolName`** KeyValue.  
@@ -136,7 +136,7 @@ You can override the executable with the **`ToolName`** KeyValue.
     ```txt
     RunTransferFile
     {
-       BuillParams "%mapbsp %gamedir/maps"
+       BuillParams "%mapbsp %mapdir"
     }
     ```  
 
@@ -169,7 +169,7 @@ You can override the executable with the **`ToolName`** KeyValue.
 
 ---
 
-## 🔑 BuildParams Placeholders  
+## BuildParams Placeholders  
 
 You can use placeholders to avoid hardcoding paths:  
 
@@ -202,7 +202,7 @@ vrad.exe -final -game "C:\Games\Team Fortress 2\tf" "C:\maps\test.vmf"
 
 ---
 
-## 📜 Execution Order  
+## Execution Order  
 
 The **order of KeyValue imports matters**.  
 Tools will run in the same order they are declared.  
@@ -231,7 +231,7 @@ If reversed, MapBuilder will attempt to run **vvis.exe before vbsp.exe**, which 
 
 ---
 
-## ✅ Example Preset  
+## Example Preset  
 
 You can also set the default preset, which will be run when none is specified in the command line:
 
@@ -293,7 +293,7 @@ This runs:
 5. `resourcecopy.exe`  
 6. `tf.exe -buildcubemaps map test`  
 ---    
-## ✅ Example Preset of a full `scripts/tools/mapbuilder_system.txt` file
+## Example Preset of a full `scripts/tools/mapbuilder_settings.txt` file
 ```txt
 MapBuilderSystem
 {
@@ -394,12 +394,12 @@ MapBuilderSystem
 	}
 }
 ```
----  
+--- 
 
 ## Contact  
 
-Steam: https://steamcommunity.com/profiles/76561199073832016/  
-Twitter: https://x.com/47Z14  
-Discord: `carlossuarez7285`  
+- **Steam**: [Profile Link](https://steamcommunity.com/profiles/76561199073832016/)  
+- **Twitter/X**: [@47Z14](https://x.com/47Z14)  
+- **Discord**: `carlossuarez7285`  
 
 ---
