@@ -136,7 +136,7 @@ You can override the executable with the **`ToolName`** KeyValue.
     ```txt
     RunTransferFile
     {
-       BuillParams "%mapbsp %gamedir/maps"
+       BuillParams "%mapbsp %mapdir"
     }
     ```  
 
