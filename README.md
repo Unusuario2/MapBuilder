@@ -136,7 +136,7 @@ You can override the executable with the **`ToolName`** KeyValue.
     ```txt
     RunTransferFile
     {
-       BuillParams "%mapbsp %mapdir"
+       BuillParams "-f %mapbsp %mapdir"
     }
     ```  
 
@@ -161,7 +161,7 @@ You can override the executable with the **`ToolName`** KeyValue.
     ```txt
     RunCustomBuilder
     {
-		BinDir "1"
+		    BinDir "1"
         ToolName "mytool.exe"
         BuildParams "%source %mapdir"
     }
@@ -275,7 +275,7 @@ For example:
 
     RunTransferFile
     {
-        BuildParams "%mapbsp %mapdir"
+        BuildParams "-f %mapbsp %mapdir"
     }
 
     RunCubemapBuilder
@@ -322,7 +322,7 @@ MapBuilderSystem
 
 			RunTrasferFile
 			{
-				BuillParams "%mapbsp %mapdir"
+				BuillParams "-f %mapbsp %mapdir"
 			}
 		}
 
@@ -345,7 +345,7 @@ MapBuilderSystem
 
 			RunTrasferFile
 			{
-				BuildParams "%mapbsp %mapdir"
+				BuildParams "-f %mapbsp %mapdir"
 			}
 		}
 
@@ -373,7 +373,7 @@ MapBuilderSystem
 
 			RunTrasferFile
 			{
-				BuildParams "%mapbsp %mapdir"
+				BuildParams "-f %mapbsp %mapdir"
 			}
 
 			RunCubemapBuilder 		

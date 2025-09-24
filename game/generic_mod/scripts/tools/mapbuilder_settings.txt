@@ -25,7 +25,7 @@ MapBuilderSystem
 
 			RunTrasferFile
 			{
-				BuillParams "%source %mapdir"
+				BuillParams "-f %source %mapdir"
 			}
 		}
 
@@ -48,7 +48,7 @@ MapBuilderSystem
 
 			RunTrasferFile
 			{
-				BuildParams "%source %mapdir"
+				BuildParams "-f %source %mapdir"
 			}
 		}
 
@@ -76,7 +76,7 @@ MapBuilderSystem
 
 			RunTrasferFile
 			{
-				BuildParams "%source %mapdir"
+				BuildParams "-f %source %mapdir"
 			}
 
 			RunCubemapBuilder 		
