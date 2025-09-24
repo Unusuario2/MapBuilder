@@ -34,7 +34,7 @@ To install **MapBuilder**, follow these steps:
 
 ## ✨ Features  
 
-- 🔧 **Compile Presets** – Define multiple presets (`Fast`, `Standard`, `Final`) in `mapbuilder_system.txt` for different workflows.  
+- 🔧 **Compile Presets** – Define multiple presets (`Fast`, `Standard`, `Final`) in `mapbuilder_settings.txt` for different workflows.  
 - 📜 **Scriptable Configuration** – Add or reorder tools, adjust parameters, and integrate custom steps without touching the source code.  
 - 🔄 **Custom Builders** – Run external programs or override default tools (`vbsp`, `vvis`, `vrad`) via the `ToolName` key.  
 - 🧩 **Dynamic Parameters** – Use placeholders like `%source`, `%filename`, `%gamedir`, `%mapbsp`, and `%mapdir` inside build parameters.  
@@ -44,7 +44,7 @@ To install **MapBuilder**, follow these steps:
 
 # MapBuilder Script System  
 
-The **MapBuilder script system** is configured inside your game `scripts/tools/mapbuilder_system.txt`.  
+The **MapBuilder script system** is configured inside your game `scripts/tools/mapbuilder_settings.txt`.  
 It defines **compile presets** (`Fast`, `Standard`, `Final`, etc.) and the order in which each tool runs.  
 
 Every builder command is wrapped inside a **KeyValue block**, and execution order follows the order they appear.  
@@ -293,7 +293,7 @@ This runs:
 5. `resourcecopy.exe`  
 6. `tf.exe -buildcubemaps map test`  
 ---    
-## ✅ Example Preset of a full `scripts/tools/mapbuilder_system.txt` file
+## ✅ Example Preset of a full `scripts/tools/mapbuilder_settings.txt` file
 ```txt
 MapBuilderSystem
 {
