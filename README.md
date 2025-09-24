@@ -3,7 +3,7 @@
 **MapBuilder** is a flexible command-line utility designed to automate the **map compilation pipeline** for Source Engine projects.  
 It replaces the need to manually run tools like `vbsp`, `vvis`, and `vrad` by allowing you to define **compile presets** and execute them in sequence with a single command.  
 
-Instead of hardcoding build steps, MapBuilder reads from a **scriptable configuration file** (`mapbuilder_system.txt`) where you can:  
+Instead of hardcoding build steps, MapBuilder reads from a **scriptable configuration file** (`mapbuilder_settings.txt`) where you can:  
 - Define multiple build **presets** (`Fast`, `Standard`, `Final`, etc.).  
 - Configure which tools should run (`vbsp`, `vvis`, `vrad`, `vbspinfo`, `resourcecopy`, cubemap builders, or custom tools).  
 - Pass flexible **build parameters** with placeholders like `%source`, `%filename`, `%gamedir`, `%mapbsp`, and `%mapdir`.  
