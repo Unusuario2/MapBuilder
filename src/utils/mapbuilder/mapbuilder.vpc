@@ -42,6 +42,8 @@ $Project "MapBuilder"
 
 	$Folder	"Header Files"
 	{
+		$File "mapbuilder.hpp"
+
 		$Folder	"Common header files"
 		{
 			$File	"..\common\consolelogger.hpp"

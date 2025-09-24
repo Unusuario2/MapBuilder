@@ -97,66 +97,68 @@ const char* ParseStringBuildParams(const char* pBuildParams)
                 char* pDot = V_strrchr(szFileName, '.');
                 if (pDot) 
                     *pDot = '\0';
-
-                int len = V_strlen(szFileName);
-                for (int j = 0; j < len; ++j)
-                    Temp.push_back(szFileName[j]);
-
+                
+                {
+                    int len = V_strlen(szFileName);
+                    for (int j = 0; j < len; ++j)
+                        Temp.push_back(szFileName[j]);
+                }
                 i += 9;
-                continue;
             }
             else if (!V_strnicmp(&pBuildParams[i], "%mapdir", 7))
             {
                 char szTemp[MAX_PATH];
                 V_sprintf_safe(szTemp, "%s\\%s", gamedir, DIR_MAPS);
-                int len = V_strlen(szTemp);
 
                 Temp.push_back('"');
-                for (int j = 0; j < len; ++j)
-                    Temp.push_back(szTemp[j]);
+                {
+                    int len = V_strlen(szTemp);
+                    for (int j = 0; j < len; ++j)
+                        Temp.push_back(szTemp[j]);
+                }
                 Temp.push_back('"');
 
                 i += 7;
-                continue;
             }
             else if (!V_strnicmp(&pBuildParams[i], "%source", 7))
             {
-                int len = V_strlen(g_szSourceFile);
                 Temp.push_back('"');
-                for (int j = 0; j < len; ++j)
-                    Temp.push_back(g_szSourceFile[j]);
+                {
+                    int len = V_strlen(g_szSourceFile);
+                    for (int j = 0; j < len; ++j)
+                        Temp.push_back(g_szSourceFile[j]);
+                }
                 Temp.push_back('"');
                 i += 7;
-                continue;
             }
             else if (!V_strnicmp(&pBuildParams[i], "%mapbsp", 7))
             {
                 char szTemp[MAX_PATH];
                 V_strcpy_safe(szTemp, g_szSourceFile);
-                char* pDot = V_strrchr(g_szSourceFile, '.');
+                char* pDot = V_strrchr(szTemp, '.');
                 if (pDot)
                     *pDot = '\0';
 
-                V_strcat_safe(szTemp, ".bsp");
-
-                int len = V_strlen(szTemp);
+                V_sprintf_safe(szTemp, "%s.bsp", szTemp);
                 Temp.push_back('"');
-                for (int j = 0; j < len; ++j)
-                    Temp.push_back(szTemp[j]);
+                {
+                    int len = V_strlen(szTemp);
+                    for (int j = 0; j < len; ++j)
+                        Temp.push_back(szTemp[j]);
+                }
                 Temp.push_back('"');
-                i += 4;
-                continue;
+                i += 7;
             }
             else if (!V_strnicmp(&pBuildParams[i], "%gamedir", 8))
             {
-                int len = V_strlen(gamedir);
                 Temp.push_back('"');
-                for (int j = 0; j < len; ++j)
-                    Temp.push_back(gamedir[j]);
-                Temp.push_back('"');
-
+                {
+                    int len = V_strlen(gamedir);
+                    for (int j = 0; j < len; ++j)
+                        Temp.push_back(gamedir[j]);
+                    Temp.push_back('"');
+                }
                 i += 8;
-                continue;
             }
             else
             {
@@ -190,7 +192,7 @@ static const std::vector<Builder_t> ParseMapBuilderScript()
     // if the user does not set the preset set the default one
     if (!g_bDefaultPresetUser)
     {
-        const char* pPreset = pKvMapBuilderSettings->GetString(KV_DEFAULTBUILDSETTINGS);
+        const char* pPreset = pKvMapBuilderSettings->GetString(KV_DEFAULTBUILDSETTINGS, nullptr);
         if (!pPreset)
             Error("\nMapBuilder -> Could not get the default KeyValue '%s' preset!\n", KV_DEFAULTBUILDSETTINGS);
         V_strcpy_safe(g_szPresetName, pPreset);
@@ -233,9 +235,9 @@ static const std::vector<Builder_t> ParseMapBuilderScript()
                     )
             {
                 const char* pToolName = Kv->GetString(KV_TOOLNAME, nullptr);
-                const char* pBuildParams = Kv->GetString(KV_BUILDPARAMS);
+                const char* pBuildParams = Kv->GetString(KV_BUILDPARAMS, nullptr);
                 if (!pBuildParams)
-                    Error("MapBuilder -> Missing KeyValue: '%s'!\n", KV_BUILDPARAMS);
+                    Error("MapBuilder -> Missing KeyValue: '%s' of '%s'!\n", KV_BUILDPARAMS, pName);
 
                 // Make the full commandline
                 Builder_t Obj = Builder_t(true, pToolName ? pToolName : [&BaseKvList, &pName]() -> const char*
@@ -283,48 +285,21 @@ static const std::vector<Builder_t> ParseMapBuilderScript()
             else if (!V_stricmp(pName, KV_CUSTOMBUILDER))
             {
                 // For custom builder we allow more custom things so the user can set custom stuff.
-                const char* pName = Kv->GetName();
-                if (pName)
-                    Error("MapBuilder -> No KeyValue found inside: '%s'!\n", KV_CUSTOMBUILDER);
+                char szBasePath[MAX_PATH] = { '\0' };
+                char szToolName[MAX_PATH] = { '\0' };
 
-                char szBasePath[MAX_PATH];
-                char szToolName[MAX_PATH];
-                if (!V_stricmp(pName, KV_BINDIR))
-                {
-                    if (Kv->GetBool(KV_BINDIR))
-                        V_strcpy_safe(szBasePath, g_szBaseToolDir);
-                }
-                else if (!V_stricmp(pName, KV_BASEDIR))
-                {
-                    if (Kv->GetBool(KV_BASEDIR))
-                        V_strcpy_safe(szBasePath, szBasePath);
-                }
-                else if (!V_stricmp(pName, KV_EXTERNALPATH))
-                {
-                    const char* pPath = Kv->GetString(KV_EXTERNALPATH);
-                    if (pPath)
-                        V_strcpy_safe(szBasePath, pPath);
-                    else
-                        Error("MapBuilder -> Malformed KeyValue '%s', Path missing!\n", KV_EXTERNALPATH);
-                }
-                else if (!V_stricmp(pName, KV_TOOLNAME))
-                {
-                    const char* pToolName = Kv->GetString(KV_TOOLNAME);
-                    if (pToolName)
-                        V_strcpy_safe(szToolName, pToolName);
-                    else
-                        Error("MapBuilder -> Malformed KeyValue '%s', Tool name missing\n!", KV_TOOLNAME);
-                }
+                if (Kv->GetBool(KV_BINDIR))
+                    V_strcpy_safe(szBasePath, g_szBaseToolDir);
+                else if (Kv->GetBool(KV_BASEDIR))
+                    V_strcpy_safe(szBasePath, g_szBaseGlobalDir);
+                else if (Kv->GetString(KV_EXTERNALPATH, nullptr))
+                    V_strcpy_safe(szBasePath, Kv->GetString(KV_EXTERNALPATH, nullptr));
+                else if (Kv->GetString(KV_TOOLNAME, nullptr))
+                    V_strcpy_safe(szToolName, Kv->GetString(KV_TOOLNAME, nullptr));
+                else if (Kv->GetString(KV_BUILDPARAMS, nullptr))
+                    RetList.push_back(Builder_t(true, szToolName, szBasePath, ParseStringBuildParams(Kv->GetString(KV_BUILDPARAMS, nullptr))));
                 else
-                {
-                    Warning("MapBuilder -> Unknown type of parameter: '%s'\n", pName);
-                }
-
-                const char* pBuildParams = Kv->GetString(KV_BUILDPARAMS);
-                if (pBuildParams)
-                    RetList.push_back(Builder_t(true, szToolName, szBasePath, ParseStringBuildParams(pBuildParams)));
-                else
-                    Error("MapBuilder -> KeyValue: '%s' is null! Add command line parameters!\n", KV_BUILDPARAMS);
+                    Error("MapBuilder -> Unknow parameter\n");
 
                 // Check if the tools exists...
                 {
